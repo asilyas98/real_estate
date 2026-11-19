@@ -1,21 +1,16 @@
 workflows:
 
   # ─────────────────────────────────────────────────────────────
-  # iOS App Store build + submit
+  # iOS App Store build + submit  (triggers on: master)
   # ─────────────────────────────────────────────────────────────
   ios-production:
     name: iOS — App Store (production)
     max_build_duration: 60
     instance_type: mac_mini_m2
 
-    integrations:
-      app_store_connect: App Store Connect API   # name of the key you add in Codemagic UI
-
     environment:
       groups:
-        - app_store_credentials   # APPLE_ID, APP_STORE_CONNECT_ISSUER_ID,
-                                  # APP_STORE_CONNECT_KEY_IDENTIFIER,
-                                  # APP_STORE_CONNECT_PRIVATE_KEY (from Codemagic UI)
+        - expo_credentials   # add EXPO_TOKEN here in Codemagic UI
       node: 20.11.0
       xcode: 15.4
       cocoapods: default
@@ -24,7 +19,7 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: main
+        - pattern: master
           include: true
           source: true
 
@@ -37,7 +32,7 @@ workflows:
         script: |
           npm install -g eas-cli
 
-      - name: Run EAS build (iOS production)
+      - name: EAS build — iOS production
         script: |
           eas build \
             --platform ios \
@@ -45,9 +40,7 @@ workflows:
             --non-interactive \
             --no-wait
 
-      # Optional: submit to App Store Connect immediately after build
-      # Remove or comment out if you want to submit manually
-      - name: Submit to App Store Connect
+      - name: EAS submit — App Store Connect
         script: |
           eas submit \
             --platform ios \
@@ -56,7 +49,6 @@ workflows:
 
     artifacts:
       - build/**/*.ipa
-      - ios/build/**/*.ipa
 
     publishing:
       email:
@@ -67,19 +59,16 @@ workflows:
           failure: true
 
   # ─────────────────────────────────────────────────────────────
-  # iOS TestFlight / internal preview build
+  # iOS TestFlight preview build  (triggers on: develop)
   # ─────────────────────────────────────────────────────────────
   ios-preview:
     name: iOS — TestFlight (preview)
     max_build_duration: 60
     instance_type: mac_mini_m2
 
-    integrations:
-      app_store_connect: App Store Connect API
-
     environment:
       groups:
-        - app_store_credentials
+        - expo_credentials
       node: 20.11.0
       xcode: 15.4
       cocoapods: default
@@ -101,7 +90,7 @@ workflows:
         script: |
           npm install -g eas-cli
 
-      - name: Run EAS build (iOS preview)
+      - name: EAS build — iOS preview
         script: |
           eas build \
             --platform ios \
@@ -111,7 +100,6 @@ workflows:
 
     artifacts:
       - build/**/*.ipa
-      - ios/build/**/*.ipa
 
     publishing:
       email:
