@@ -12,7 +12,7 @@ workflows:
       groups:
         - expo_credentials   # add EXPO_TOKEN here in Codemagic UI
       node: 20.11.0
-      xcode: 15.4
+      xcode: latest
       cocoapods: default
 
     triggering:
@@ -70,7 +70,7 @@ workflows:
       groups:
         - expo_credentials
       node: 20.11.0
-      xcode: 15.4
+      xcode: latest
       cocoapods: default
 
     triggering:
