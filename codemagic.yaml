@@ -5,6 +5,8 @@ workflows:
     instance_type: mac_mini_m2
 
     environment:
+      groups:
+        - expo_credentials
       node: 22.11.0
       xcode: latest
       cocoapods: default
