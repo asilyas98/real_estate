@@ -10,8 +10,6 @@ workflows:
       node: 22.11.0
       xcode: latest
       cocoapods: default
-      vars:
-        EXPO_TOKEN: $EXPO_TOKEN
 
     triggering:
       events:
