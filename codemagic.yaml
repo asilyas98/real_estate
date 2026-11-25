@@ -26,9 +26,11 @@ workflows:
         script: npm install -g eas-cli
 
       - name: Verify Expo auth
+        script: eas whoami
+
+      - name: Diagnose Expo config
         script: |
-          echo "EXPO_TOKEN length: ${#EXPO_TOKEN}"
-          eas whoami
+          EXPO_DEBUG=1 npx expo config --json > /tmp/expo-config.json
 
       - name: EAS build — iOS production
         script: |
@@ -41,7 +43,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - asilyas98@gmail.com
+          - asilyas988@gmail.com
         notify:
           success: true
           failure: true
