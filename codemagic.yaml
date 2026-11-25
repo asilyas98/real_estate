@@ -30,8 +30,12 @@ workflows:
 
       - name: Diagnose Expo config
         script: |
-          EXPO_DEBUG=1 npx expo config --json > /tmp/expo-config.json
-
+          if EXPO_DEBUG=1 npx expo config --json > /tmp/expo-config.log 2>&1; then
+            echo "Expo config passed."
+          else
+            cat /tmp/expo-config.log
+            exit 1
+          fi
       - name: EAS build — iOS production
         script: |
           eas build \
